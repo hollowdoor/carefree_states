@@ -1,5 +1,8 @@
 var Emitter = require('more-events').Emitter;
-
+/*
+git remote add origin https://github.com/hollowdoor/carefree_states.git
+git push -u origin master
+*/
 function State(){
     this.shells = [];
     this.events = new Emitter();

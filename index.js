@@ -29,7 +29,7 @@ State.prototype.exec = function(id, obj){
 
 
     return new Promise(function(resolve, reject){
-
+        var result;
         function onResolve(value){
             self.events.emit('exec', value, obj);
             resolve(value);
@@ -42,13 +42,15 @@ State.prototype.exec = function(id, obj){
         for(var i=0; i<self.shells.length; i++){
             if(self.shells[i].id.test(id)){
 
-                result = self.shells[i].shell.exec.call(self, obj);
+
                 if(typeof obj.then === 'function'){
-                    console.log('thened');
+
                     obj.then(function(value){
-                        onResolve(value);
+                        result = self.shells[i].shell.exec.call(self, value);
+                        result.then(onResolve, onReject);
                     }, onReject);
                 }else{
+                    result = self.shells[i].shell.exec.call(self, obj);
                     result.then(onResolve, onReject);
                 }
                 return;
